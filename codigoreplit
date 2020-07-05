@@ -1,0 +1,48 @@
+from flask import Flask
+
+from flask_restful import Resource, Api, reqparse
+from lsuinox.Banco.Database import *
+
+#db = dataset.connect('sqlite:///:memory:')
+
+
+db = Banco()
+app = Flask(__name__)
+api = Api(app)
+
+
+class Cadastro(Resource):
+    def post(self):
+        print("[*] POST METHOD LOAD DATA ARGS")
+        argumentos = reqparse.RequestParser()
+        argumentos.add_argument("nome")
+        argumentos.add_argument("cpf")
+        argumentos.add_argument("plano")
+        argumentos.add_argument("cidade")
+        argumentos.add_argument("bairro")
+        argumentos.add_argument("rua")
+        argumentos.add_argument("cep")
+        argumentos.add_argument("quant_porcos")
+        argumentos.add_argument("datetime")
+        argumentos.add_argument("carencia")
+        argumentos.add_argument("status_solicitacao")
+        argumentos.add_argument("Forma_pagamento")
+        argumentos.add_argument("Fatura")
+        argumentos.add_argument("Mensalidade")
+        dados = argumentos.parse_args()
+        #print(dados)
+        print("[*] cadastrando.... ")
+        db.cadastro(dados)
+        return {"usuario": "Cadastro de usuario feito"}, 200
+        
+
+class about(Resource):
+    def get(self):
+        return {"mesage": "api construida pela suino-x"}, 200
+
+
+api.add_resource(about, "/")
+api.add_resource(Cadastro, "/suinox/api/v1/auth")
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", debug=True)
