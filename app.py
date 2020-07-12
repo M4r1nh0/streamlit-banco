@@ -4,9 +4,9 @@ import numpy as np
 from requests import post
 from datetime import datetime
 
-endpoint = "https://shockingfrostycontrolflowgraph--danielmarinho.repl.co/suinox/api/v1/auth"
+endpoint = "https://ShockingFrostyControlflowgraph.danielmarinho.repl.co/suinox/api/v1/cadastro"
 
-def main():
+def cadastrar():
     st.title('Tela de cadastro')
     Nome = st.text_input('Digite seu nome')
     cpf = st.text_input('Digite seu cpf')
@@ -41,9 +41,30 @@ def main():
         else:
             st.write("Ocorreu algum erro Tente novamente mais tarde ou entre em contato com nosso setor de técnico")
             st.write("email: ")
-
     else:
         st.info('Clique no botão enviar para enviar seus dados :)')
+
+def Listar_user():
+    st.title('Listando usuarios')
+    st.write('Digite um nome do usario(cpf) ou deixe em branco')
+    buscando = st.text_input('Digite um nome ou cpf')
+    if st.button('Buscar'):
+        data={
+        "busca": buscando
+        }
+        #st.write(buscando)
+        resultado = post("https://ShockingFrostyControlflowgraph.danielmarinho.repl.co/suinox/api/v1/lista", data=data).json()
+        st.write(resultado)
+
+def main():
+    menu = st.sidebar.selectbox(
+    "Menu principal",
+    ("Cadastro de usuario", "Lista usuario", "Atualizar dados de usuario ","Deletar usuario")
+    )
+    if menu == "Cadastro de usuario":
+        cadastrar()
+    if menu == "Lista usuario":
+        Listar_user()
 
 if __name__ == '__main__':
     main()
